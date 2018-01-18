@@ -15,7 +15,6 @@ const styles = theme => ({
     },
     button: {
         marginTop: '15px',
-        marginLeft: '0px',
         marginRight: '15px',
     }
 })
@@ -33,26 +32,21 @@ class NewSightingForm extends Component {
             controlledCount: "",
             controlledSpecies: "",
             controlledDescription: "",
-            controlledDate: new Date(),
             apiFetchError: null,
             inputValidationError: null
         }
     }
-
-    componentDidMount() {
-        //fetch species from the API and add them to the state
-        fetch(urljoin(window.apiUrl, window.speciesPath))
-            .then((response) => {
-                if (!response.ok) {
-                    throw Error()
-                }
-                return response.json()
-            })
-            .then((responseInJson) => {
-                this.setState({ supportedSpecies: responseInJson, apiFetchError: null })
-            }).catch((error) => {
-                this.setState({ apiFetchError: new Error('Failed to fetch content from the api') })
-            })
+   
+    async componentDidMount() {
+        //fetch species from the API and add them to the state 
+        try {
+            var response = await fetch(urljoin(window.apiUrl, window.speciesPath))
+            if(!response.ok) throw Error('Error fetching content from the API.')
+            response = await response.json()
+        } catch(error){
+            return this.setState({apiFetchError: error})
+        }
+        this.setState({supportedSpecies: response, apiFetchError: null })
     }
 
     handleChange(event) {
@@ -73,21 +67,16 @@ class NewSightingForm extends Component {
         try {
             this.validateInputData(inputDataObject)
         } catch (error) {
-            this.setState({ inputValidationError: error })
-            return
+            return this.setState({ inputValidationError: error })
         }
-
         //input is valid
         this.setState({ inputValidationError: null })
         
-
         try {
             await this.sendNewSightingToApi(inputDataObject)
         } catch (error) {
-            this.setState({ apiFetchError: error })
-            return
+            return this.setState({ apiFetchError: error })
         }
-
         this.props.onClose()
     }
 
@@ -116,7 +105,7 @@ class NewSightingForm extends Component {
             error.invalidInputName = 'species'
             throw error
         }
-        if (objectWithInputs.description === undefined || typeof (objectWithInputs.description) === typeof (String)) {
+        if (objectWithInputs.description === undefined || typeof(objectWithInputs.description) !== 'string') {
             let error = new Error('Invalid description')
             error.invalidInputName = 'description'
             throw error
@@ -139,14 +128,19 @@ class NewSightingForm extends Component {
 
         return (
             <Paper elevation={this.props.elevation} className={this.props.classes.NewSightingForm + ' ' + this.props.className}>
-                <TextField fullWidth margin='normal' name='description' multiline rows={3} label='Tell more about it' value={this.state.formStateCount} onChange={this.handleChange} error={descriptionError} />
-                <Button type='submit' raised color='primary' onClick={this.handleSubmit} className={this.props.classes.button}>Send</Button>
-                <Button raised color='accent' onClick={this.props.onClose} className={this.props.classes.button}>Nevermind</Button>
                 <PositiveIntegerInput name='count' value={this.state.controlledCount} onChange={this.handleChange} error={countError}
                     label='How many ducks did you see?' fullWidth margin='normal'/>
 
                 <SpeciesSelect value={this.state.controlledSpecies} onChange={this.handleChange} error={speciesError} species={this.state.supportedSpecies}
                     label='What species were they?' fullWidth margin='normal'/>
+
+                <TextField name='description' value={this.state.formStateCount} onChange={this.handleChange} error={descriptionError}
+                    label='Tell more about it' multiline rows={3} fullWidth margin='normal' />
+
+                <Button type='submit' onClick={this.handleSubmit} className={this.props.classes.button}
+                    raised color='primary'>Send</Button>
+                <Button onClick={this.props.onClose} className={this.props.classes.button}
+                    raised color='accent'>Nevermind</Button>
 
             </Paper>
         );
