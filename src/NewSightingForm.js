@@ -2,15 +2,12 @@ import React, { Component } from 'react';
 import urljoin from 'url-join'
 import { withStyles } from 'material-ui/styles';
 import TextField from 'material-ui/TextField'
-import Input, { InputLabel } from 'material-ui/Input';
-import { MenuItem } from 'material-ui/Menu';
-import { FormControl, FormHelperText } from 'material-ui/Form';
-import Select from 'material-ui/Select'
 import Button from 'material-ui/Button'
 import Paper from 'material-ui/Paper';
 
 import ErrorMessage from './ErrorMessage'
 import PositiveIntegerInput from './PositiveIntegerInput'
+import SpeciesSelect from './SpeciesSelect'
 
 const styles = theme => ({
     NewSightingForm: {
@@ -142,21 +139,14 @@ class NewSightingForm extends Component {
 
         return (
             <Paper elevation={this.props.elevation} className={this.props.classes.NewSightingForm + ' ' + this.props.className}>
-                <FormControl fullWidth margin='normal' error={speciesError}>
-                    <InputLabel>What species were they?</InputLabel>
-                    <Select name='species' value={this.state.controlledSpecies} input={<Input />} onChange={this.handleChange}>
-                        {
-                            this.state.supportedSpecies.map((species) => {
-                                return (<MenuItem value={species.name}>{species.name.capitalize()}</MenuItem>)
-                            })
-                        }
-                    </Select>
-                </FormControl>
                 <TextField fullWidth margin='normal' name='description' multiline rows={3} label='Tell more about it' value={this.state.formStateCount} onChange={this.handleChange} error={descriptionError} />
                 <Button type='submit' raised color='primary' onClick={this.handleSubmit} className={this.props.classes.button}>Send</Button>
                 <Button raised color='accent' onClick={this.props.onClose} className={this.props.classes.button}>Nevermind</Button>
                 <PositiveIntegerInput name='count' value={this.state.controlledCount} onChange={this.handleChange} error={countError}
                     label='How many ducks did you see?' fullWidth margin='normal'/>
+
+                <SpeciesSelect value={this.state.controlledSpecies} onChange={this.handleChange} error={speciesError} species={this.state.supportedSpecies}
+                    label='What species were they?' fullWidth margin='normal'/>
 
             </Paper>
         );
