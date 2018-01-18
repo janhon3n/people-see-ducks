@@ -10,6 +10,7 @@ import Button from 'material-ui/Button'
 import Paper from 'material-ui/Paper';
 
 import ErrorMessage from './ErrorMessage'
+import PositiveIntegerInput from './PositiveIntegerInput'
 
 const styles = theme => ({
     NewSightingForm: {
@@ -58,28 +59,15 @@ class NewSightingForm extends Component {
     }
 
     handleChange(event) {
-        const targetName = event.target.name
-        const stateVariableName = "controlled" + targetName.capitalize()
-        let value = event.target.value
-
-        // format value and dont update unallowed inputs
-        switch (targetName) {
-            case 'count':
-                if (value === '') break
-                value = Number(value)
-                if (Number.isNaN(value) || !Number.isFinite(value) || value < 0)
-                    return
-                break
-        }
-
+        const stateVariableName = "controlled" + event.target.name.capitalize()
         this.setState({
-            [stateVariableName]: value
+            [stateVariableName]: event.target.value
         })
     }
 
     async handleSubmit(event) {
         let inputDataObject = {
-            'count': this.state.controlledCount,
+            'count': Number(this.state.controlledCount),
             'species': this.state.controlledSpecies,
             'dateTime': new Date().toISOString(),
             'description': this.state.controlledDescription
@@ -119,7 +107,7 @@ class NewSightingForm extends Component {
     }
 
     validateInputData(objectWithInputs) {
-        if (objectWithInputs.count === undefined || Number.isNaN(objectWithInputs.count) || !Number.isFinite(objectWithInputs.count) || objectWithInputs.count <= 0) {
+        if (objectWithInputs.count === undefined  || typeof(objectWithInputs.count) !== 'number' || Number.isNaN(objectWithInputs.count) || !Number.isFinite(objectWithInputs.count) || objectWithInputs.count <= 0) {
             let error = new Error('Invalid duck count')
             error.invalidInputName = 'count'
             throw error
@@ -154,7 +142,6 @@ class NewSightingForm extends Component {
 
         return (
             <Paper elevation={this.props.elevation} className={this.props.classes.NewSightingForm + ' ' + this.props.className}>
-                <TextField fullWidth margin='normal' name='count' label='How many ducks did you see?' value={this.state.controlledCount} onChange={this.handleChange} error={countError} />
                 <FormControl fullWidth margin='normal' error={speciesError}>
                     <InputLabel>What species were they?</InputLabel>
                     <Select name='species' value={this.state.controlledSpecies} input={<Input />} onChange={this.handleChange}>
@@ -168,6 +155,9 @@ class NewSightingForm extends Component {
                 <TextField fullWidth margin='normal' name='description' multiline rows={3} label='Tell more about it' value={this.state.formStateCount} onChange={this.handleChange} error={descriptionError} />
                 <Button type='submit' raised color='primary' onClick={this.handleSubmit} className={this.props.classes.button}>Send</Button>
                 <Button raised color='accent' onClick={this.props.onClose} className={this.props.classes.button}>Nevermind</Button>
+                <PositiveIntegerInput name='count' value={this.state.controlledCount} onChange={this.handleChange} error={countError}
+                    label='How many ducks did you see?' fullWidth margin='normal'/>
+
             </Paper>
         );
     }
