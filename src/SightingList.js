@@ -4,6 +4,7 @@ import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import Paper from 'material-ui/Paper';
 
+import CenterAlignContainer from './CenterAlignContainer'
 import SightingListItem from './SightingListItem'
 import ErrorMessage from './ErrorMessage'
 
@@ -54,13 +55,13 @@ class SightingList extends Component {
   render() {
     if (this.state.apiFetchError !== null) {
       return (
-        <Paper elevation={this.props.elevation} className={this.props.classes.SightingList + ' ' + this.props.className}>
-          <ErrorMessage message={this.state.apiFetchError.message} />
-        </Paper>
+        <ErrorMessage message={this.state.apiFetchError.message} />
       )
     } else if (this.state.sightings === null) {
       return (
+        <CenterAlignContainer>
           <CircularProgress/>
+        </CenterAlignContainer>
       )
     }
 
