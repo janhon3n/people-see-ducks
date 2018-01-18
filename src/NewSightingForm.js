@@ -14,11 +14,6 @@ import ErrorMessage from './ErrorMessage'
 const styles = theme => ({
     NewSightingForm: {
         padding: '30px',
-    },
-    button: {
-        marginTop: '15px',
-        marginLeft: '0px',
-        marginRight: '15px',
     }
 })
 
@@ -39,22 +34,6 @@ class NewSightingForm extends Component {
             apiFetchError: null,
             inputValidationError: null
         }
-    }
-
-    componentDidMount() {
-        //fetch species from the API and add them to the state
-        fetch(urljoin(window.apiUrl, window.speciesPath))
-            .then((response) => {
-                if (!response.ok) {
-                    throw Error()
-                }
-                return response.json()
-            })
-            .then((responseInJson) => {
-                this.setState({ supportedSpecies: responseInJson, apiFetchError: null })
-            }).catch((error) => {
-                this.setState({ apiFetchError: new Error('Failed to fetch content from the api') })
-            })
     }
 
     handleChange(event) {
@@ -94,7 +73,6 @@ class NewSightingForm extends Component {
 
         //input is valid
         this.setState({ inputValidationError: null })
-        
 
         try {
             await this.sendNewSightingToApi(inputDataObject)
