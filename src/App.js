@@ -4,8 +4,9 @@ import Grid from 'material-ui/Grid'
 import Button from 'material-ui/Button'
 import Typography from 'material-ui/Typography'
 
-import SightingList from './SightingList'
-import ShrinkingContainer from './ShrinkingContainer'
+import SortableSightingList from './SortableSightingList'
+import ReactiveContainer from './ReactiveContainer'
+import ScrollContainer from './ScrollContainer'
 import NewSightingForm from './NewSightingForm';
 
 const styles = theme => ({
@@ -18,15 +19,11 @@ const styles = theme => ({
     flexDirection:'column',
     alignItems:'center',
   },
-
   noShrink: {
     flexShrink:0
   },
   leaveSpace: {
-    margin:'15px'
-  },
-  leaveSpaceAfter: {
-    marginBottom:'66px'
+    margin:'20px'
   }
 });
 
@@ -46,24 +43,27 @@ class App extends Component {
 
   render() {
     let classes = this.props.classes
-    return (
+    return (      
       <div className={classes.App}>
         <Typography type='display3' className={classes.leaveSpace + ' ' + classes.noShrink}>People see ducks!</Typography>
-        {(this.state.showNewSightingForm ? 
-        [
-          <ShrinkingContainer>
-            <NewSightingForm className={classes.leaveSpaceAfter + ' ' + classes.relativeWidth} onClose={(e) => {
-              this.toggleNewSightingFormVisibility(false) 
-            }}/>
-          </ShrinkingContainer>
-        ] : [
-          <ShrinkingContainer>
-            <SightingList className={classes.relativeWidth}/>
-          </ShrinkingContainer>,
-          <Button raised color='primary' className={classes.leaveSpace + ' ' + classes.noShrink} onClick={(e) => {
-            this.toggleNewSightingFormVisibility(true)
-          }}>I saw ducks!</Button>
-        ])}
+        {(this.state.showNewSightingForm ?
+          <ReactiveContainer>
+            <ScrollContainer>
+              <NewSightingForm onClose={(e) => {
+                this.toggleNewSightingFormVisibility(false) 
+              }}/>
+            </ScrollContainer>
+          </ReactiveContainer>
+        :
+          <React.Fragment>
+            <ReactiveContainer>
+              <SortableSightingList/>
+            </ReactiveContainer>,
+            <Button raised color='primary' className={classes.leaveSpace + ' ' + classes.noShrink} onClick={(e) => {
+              this.toggleNewSightingFormVisibility(true)
+            }}>I saw ducks!</Button>
+          </React.Fragment>
+        )}
       </div>
     )
   }
