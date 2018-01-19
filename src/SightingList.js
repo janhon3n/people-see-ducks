@@ -10,7 +10,6 @@ import ErrorMessage from './ErrorMessage'
 
 const styles = theme => ({
   SightingList: {
-    padding:'5px'
   }
 })
 
@@ -27,20 +26,16 @@ class SightingList extends Component {
   }
 
 
-  fetchSightingsFromTheApi() {
-    //fetch sightings from the API and add them to the state
-    fetch(urljoin(window.apiUrl, window.sightingsPath))
-      .then((response) => {
-        if (!response.ok) {
-          throw Error()
-        }
-        return response.json()
-      })
-      .then((responseInJson) => {
-        this.setState({ sightings: responseInJson, apiFetchError: null })
-      }).catch((error) => {
-        this.setState({ apiFetchError: new Error('Failed to fetch content from the api') })
-      })
+  async fetchSightingsFromTheApi() {
+    //fetch species from the API and add them to the state 
+    try {
+      var response = await fetch(urljoin(window.apiUrl, window.sightingsPath))
+      if (!response.ok) throw Error('Error fetching content from the API.')
+      response = await response.json()
+    } catch (error) {
+      return this.setState({ apiFetchError: error })
+    }
+    this.setState({ sightings: response, apiFetchError: null })
   }
 
 
@@ -53,23 +48,37 @@ class SightingList extends Component {
 
 
   render() {
+
     if (this.state.apiFetchError !== null) {
       return (
         <ErrorMessage message={this.state.apiFetchError.message} />
       )
     } else if (this.state.sightings === null) {
       return (
-        <CenterAlignContainer>
-          <CircularProgress/>
+        <CenterAlignContainer flexDirection='column'>
+          <CircularProgress />
         </CenterAlignContainer>
       )
     }
 
+    let sightings = this.state.sightings.slice()
+    let sortingFunction
+    if(this.props.sorting === 'ascending'){
+      sortingFunction = (s1, s2) => {
+        return new Date(s1.dateTime) < new Date(s2.dateTime)
+      }
+    } else {
+      sortingFunction = (s1, s2) => {
+        return new Date(s1.dateTime) > new Date(s2.dateTime)
+      }
+    }
+    sightings.sort(sortingFunction)
+
     return (
       <div className={this.props.classes.SightingList + ' ' + this.props.className}>
         {
-          this.state.sightings.map((sighting) => {
-            return (<SightingListItem sighting={sighting} />)
+          sightings.map((sighting) => {
+            return (<SightingListItem key={sighting.id} sighting={sighting} />)
           })
         }
       </div>
