@@ -33,6 +33,8 @@ class SightingList extends Component {
       if (!response.ok) throw Error('Error fetching content from the API.')
       response = await response.json()
     } catch (error) {
+      error.extraMessage = 'Could not fetch the sightings from the API.'
+      console.log(error)
       return this.setState({ apiFetchError: error })
     }
     this.setState({ sightings: response, apiFetchError: null })
@@ -45,13 +47,15 @@ class SightingList extends Component {
     }, 5000)
     this.fetchSightingsFromTheApi()
   }
+  componentWillUnmount() {
+    window.clearInterval(this.fetchIntervalId)
+  }
 
 
   render() {
-
     if (this.state.apiFetchError !== null) {
       return (
-        <ErrorMessage message={this.state.apiFetchError.message} />
+        <ErrorMessage error={this.state.apiFetchError} />
       )
     } else if (this.state.sightings === null) {
       return (

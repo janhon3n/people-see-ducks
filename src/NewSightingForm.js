@@ -44,6 +44,8 @@ class NewSightingForm extends Component {
             if(!response.ok) throw Error('Error fetching content from the API.')
             response = await response.json()
         } catch(error){
+            error.extraMessage = 'Could not fetch the supported species from the API.'
+            console.log(error)
             return this.setState({apiFetchError: error})
         }
         this.setState({supportedSpecies: response, apiFetchError: null })
@@ -116,7 +118,7 @@ class NewSightingForm extends Component {
         if (this.state.apiFetchError !== null) {
             return (
                 <Paper elevation={this.props.elevation} className={this.props.classes.NewSightingForm + ' ' + this.props.className}>
-                    <ErrorMessage message={this.state.apiFetchError.message} />
+                    <ErrorMessage error={this.state.apiFetchError} />
                     <Button raised color='primary' className={this.props.classes.button} onClick={this.props.onClose}>Return</Button>
                 </Paper>
             )
