@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
 
 import Grid from 'material-ui/Grid'
-import Typography from 'material-ui/Typography/Typography';
 
 const styles = theme => ({
-    ShrinkingContainer: {
+    ReactiveContainer: {
+        height:'100%',
         position:'relative',
         width: '100%',
-        overflow: 'auto',
+        overflow: 'hidden',
         boxSizing: 'border-box',
         [theme.breakpoints.up('sm')]: {
             width: 'calc(100% - 80px)',
@@ -17,15 +17,15 @@ const styles = theme => ({
     }
 })
 
-class ShrinkingContainer extends Component {
+class ReactiveContainer extends Component {
 
     render() {
         return (
-            <div className={this.props.classes.ShrinkingContainer}>
+            <div className={this.props.classes.ReactiveContainer}>
                 {this.props.children}
             </div>
         );
     }
 }
 
-export default withStyles(styles)(ShrinkingContainer);
+export default withStyles(styles)(ReactiveContainer);
