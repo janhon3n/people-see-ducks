@@ -4,15 +4,15 @@ import { withStyles } from 'material-ui/styles';
 let styles = theme => ({
     CenterAlignContainer: {
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
+        justifyContent: 'center',
         overflow: 'hidden'
     }
 })
 
 function CenterAlignContainer(props){
     return (
-        <div className={props.classes.CenterAlignContainer}>
+        <div className={props.classes.CenterAlignContainer + ' ' + props.className} style={{flexDirection: props.flexDirection}}>
             {props.children}
         </div>
         )
