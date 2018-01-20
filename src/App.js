@@ -5,66 +5,64 @@ import Button from 'material-ui/Button'
 import Typography from 'material-ui/Typography'
 
 import SortableSightingList from './SortableSightingList'
-import ReactiveContainer from './ReactiveContainer'
-import ScrollContainer from './ScrollContainer'
 import NewSightingForm from './NewSightingForm';
+import ShrinkingGridItem from './ShrinkingGridItem'
+import FullScreenWidthContainer from './FullScreenWidthContainer'
 
 const styles = theme => ({
   App: {
     backgroundColor: theme.palette.primary[100],
-    overflow:'hidden',
-    width:'100vw',
-    height:'100vh',
-    display:'flex',
-    flexDirection:'column',
-    alignItems:'center',
+    overflow: 'hidden',
+    height: '100%',
   },
-  noShrink: {
-    flexShrink:0
-  },
-  leaveSpace: {
-    margin:'20px'
+  leaveMargins: {
+    margin: '20px'
   }
 });
 
 class App extends Component {
-  
-  constructor(props){
+
+  constructor(props) {
     super(props)
     this.toggleNewSightingFormVisibility = this.toggleNewSightingFormVisibility.bind(this)
     this.state = {
-      showNewSightingForm : false
+      showNewSightingForm: false
     }
   }
 
-  toggleNewSightingFormVisibility(newVisibility){
-    this.setState({showNewSightingForm: newVisibility})
+  toggleNewSightingFormVisibility(newVisibility) {
+    this.setState({ showNewSightingForm: newVisibility })
   }
 
   render() {
     let classes = this.props.classes
-    return (      
-      <div className={classes.App}>
-        <Typography type='display3' className={classes.leaveSpace + ' ' + classes.noShrink}>People see ducks!</Typography>
-        {(this.state.showNewSightingForm ?
-          <ReactiveContainer>
-            <ScrollContainer>
+    return (
+      <Grid container justify='start' alignItems='center' direction='column' wrap='nowrap' spacing={0} className={classes.App}>
+        <Grid item>
+          <Typography type='display2' className={classes.leaveMargins}>People see ducks!</Typography>
+        </Grid>
+
+        {(this.state.showNewSightingForm ? 
+          <ShrinkingGridItem overflow='auto'>
+            <FullScreenWidthContainer>
               <NewSightingForm onClose={(e) => {
-                this.toggleNewSightingFormVisibility(false) 
+                this.toggleNewSightingFormVisibility(false)
               }}/>
-            </ScrollContainer>
-          </ReactiveContainer>
+            </FullScreenWidthContainer>
+          </ShrinkingGridItem>
         :
           <React.Fragment>
-            <ReactiveContainer>
-              <SortableSightingList/>
-            </ReactiveContainer>,
-            <Button raised color='primary' className={classes.leaveSpace + ' ' + classes.noShrink} onClick={(e) => {
-              this.toggleNewSightingFormVisibility(true)
-            }}>I saw ducks!</Button>
+            <ShrinkingGridItem overflow='hidden'>
+              <SortableSightingList />
+            </ShrinkingGridItem>
+            <Grid item className={classes.leaveMargins}>
+              <Button raised color='primary' onClick={(e) => {
+                this.toggleNewSightingFormVisibility(true)
+              }}>I saw ducks!</Button>
+            </Grid>
           </React.Fragment>
         )}
-      </div>
+      </Grid>
     )
   }
 }

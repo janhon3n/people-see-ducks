@@ -4,12 +4,13 @@ import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import Paper from 'material-ui/Paper';
 
-import CenterAlignContainer from './CenterAlignContainer'
 import SightingListItem from './SightingListItem'
 import ErrorMessage from './ErrorMessage'
 
 const styles = theme => ({
   SightingList: {
+    width:'100vw',
+    maxWidth:'700px'
   }
 })
 
@@ -59,9 +60,7 @@ class SightingList extends Component {
       )
     } else if (this.state.sightings === null) {
       return (
-        <CenterAlignContainer flexDirection='column'>
-          <CircularProgress />
-        </CenterAlignContainer>
+        <CircularProgress style={{padding:'5px'}} size={60}/>
       )
     }
 
