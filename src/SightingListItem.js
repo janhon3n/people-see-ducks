@@ -5,11 +5,9 @@ import Grid from 'material-ui/Grid'
 import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography/Typography';
 
-const border = '1px solid #bbb'
 const styles = theme => ({
     container: {
-        border:border,
-        padding:'20px',
+        overflow:'hidden',
         '&:last-child': {
             marginBottom:'0px'
         },
@@ -19,11 +17,21 @@ const styles = theme => ({
         margin:'15px'
     },
     header: {
-        paddingBottom: '10px',
+        backgroundColor:theme.palette.primary[50],
+        borderBottom: '1px solid #999',
+        marginBottom:'10px',
         display:'flex',
         justifyContent:'space-between',
+        padding:'10px'
     },
-    description: {
+    main: {
+        padding:'10px'
+    },
+    ducks: {
+        marginTop:'10px',
+    },
+    duck: {
+        opacity:'0.7'
     }
 })
 
@@ -38,12 +46,21 @@ class SightingListItem extends Component {
     return (
         <Paper elevation={5} className={this.props.classes.container} key={this.props.sighting.id}>
             <div className={this.props.classes.header}>
-                <Typography type='body2'>{'Someone saw ' + count + ' ' + species.capitalize() + (count > 1 ? 's': '')}</Typography>
+                <Typography type='title'>{'Someone saw ' + count + ' ' + species.capitalize() + (count > 1 ? 's': '')}</Typography>
                 <Typography type='body1'>{date.toDateString()}</Typography>
             </div>
-            <Typography type='body1' className={this.props.classes.description}>
-                {description}
-            </Typography>
+            <div className={this.props.classes.main}>
+                <Typography type='body1'>
+                        {description}
+                </Typography>
+                <div className={this.props.classes.ducks}>
+                {
+                    [...Array(count)].map(() => {
+                        return <img className={this.props.classes.duck} src='rubber-clipart-yToeq8G8c.svg' width='24'/>
+                    })
+                }
+                </div>
+            </div>
         </Paper>
     );
   }
