@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
+import moment from 'moment'
 
 import Grid from 'material-ui/Grid'
 import Paper from 'material-ui/Paper';
@@ -19,7 +20,6 @@ const styles = theme => ({
     header: {
         backgroundColor:theme.palette.primary[50],
         borderBottom: '1px solid #999',
-        marginBottom:'10px',
         display:'flex',
         justifyContent:'space-between',
         padding:'10px'
@@ -41,13 +41,13 @@ class SightingListItem extends Component {
     let count = this.props.sighting.count
     let species = this.props.sighting.species
     let description = this.props.sighting.description
-    let date = new Date(this.props.sighting.dateTime)
+    let date = moment(this.props.sighting.dateTime)
 
     return (
         <Paper elevation={5} className={this.props.classes.container} key={this.props.sighting.id}>
             <div className={this.props.classes.header}>
                 <Typography type='title'>{'Someone saw ' + count + ' ' + species.capitalize() + (count > 1 ? 's': '')}</Typography>
-                <Typography type='body1'>{date.toDateString()}</Typography>
+                <Typography type='body1'>{date.format("DD.MM.YYYY HH:mm")}</Typography>
             </div>
             <div className={this.props.classes.main}>
                 <Typography type='body1'>
