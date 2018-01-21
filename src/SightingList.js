@@ -1,44 +1,44 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react'
 import urljoin from 'url-join'
-import { withStyles } from 'material-ui/styles';
-import { CircularProgress } from 'material-ui/Progress';
-import Paper from 'material-ui/Paper';
+import {withStyles} from 'material-ui/styles'
+import PropTypes from 'prop-types'
+import {CircularProgress} from 'material-ui/Progress'
 
 import SightingListItem from './SightingListItem'
 import ErrorMessage from './ErrorMessage'
 
-const styles = theme => ({
+const styles = (theme) => ({
   SightingList: {
-    width:'100vw',
-    maxWidth:'700px'
-  }
+    width: '100vw',
+    maxWidth: '700px',
+  },
 })
 
 class SightingList extends Component {
-
   constructor(props) {
     super(props)
     this.fetchIntervalId = null
 
     this.state = {
       sightings: null,
-      apiFetchError: null
+      apiFetchError: null,
     }
   }
 
 
   async fetchSightingsFromTheApi() {
-    //fetch species from the API and add them to the state 
+    let response
+    // fetch species from the API and add them to the state
     try {
-      var response = await fetch(urljoin(window.apiUrl, window.sightingsPath))
+      response = await fetch(urljoin(window.apiUrl, window.sightingsPath))
       if (!response.ok) throw Error('Error fetching content from the API.')
       response = await response.json()
     } catch (error) {
       error.extraMessage = 'Could not fetch the sightings from the API.'
       console.log(error)
-      return this.setState({ apiFetchError: error })
+      return this.setState({apiFetchError: error})
     }
-    this.setState({ sightings: response, apiFetchError: null })
+    this.setState({sightings: response, apiFetchError: null})
   }
 
 
@@ -55,18 +55,14 @@ class SightingList extends Component {
 
   render() {
     if (this.state.apiFetchError !== null) {
-      return (
-        <ErrorMessage error={this.state.apiFetchError} />
-      )
+      return (<ErrorMessage error={this.state.apiFetchError} />)
     } else if (this.state.sightings === null) {
-      return (
-        <CircularProgress style={{padding:'5px'}} size={60}/>
-      )
+      return (<CircularProgress style={{padding: '5px'}} size={60} />)
     }
 
     let sightings = this.state.sightings.slice()
     let sortingFunction
-    if(this.props.sorting === 'ascending'){
+    if (this.props.sorting === 'ascending') {
       sortingFunction = (s1, s2) => {
         return new Date(s1.dateTime) < new Date(s2.dateTime)
       }
@@ -78,15 +74,20 @@ class SightingList extends Component {
     sightings.sort(sortingFunction)
 
     return (
-      <div className={this.props.classes.SightingList + ' ' + this.props.className}>
+      <div className={this.props.classes.SightingList}>
         {
           sightings.map((sighting) => {
             return (<SightingListItem key={sighting.id} sighting={sighting} />)
           })
         }
       </div>
-    );
+    )
   }
 }
 
-export default withStyles(styles)(SightingList);
+SightingList.propTypes = {
+  classes: PropTypes.object.isRequired,
+  sorting: PropTypes.string,
+}
+
+export default withStyles(styles)(SightingList)

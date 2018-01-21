@@ -1,16 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
 import './config.js'
 import 'typeface-roboto'
 
-import registerServiceWorker from './registerServiceWorker';
+import App from './App'
 
-import App from './App';
-
-String.prototype.capitalize = function() {
-    return this.charAt(0).toUpperCase() + this.slice(1);
+window.capitalizeString = function(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+ReactDOM.render(<App />, document.getElementById('root'))

@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
-import Input, { InputLabel } from 'material-ui/Input';
-import { MenuItem } from 'material-ui/Menu';
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
+import Input, {InputLabel} from 'material-ui/Input'
+import {MenuItem} from 'material-ui/Menu'
 import Select from 'material-ui/Select'
-import { FormControl, FormHelperText } from 'material-ui/Form';
+import {FormControl} from 'material-ui/Form'
 
 class SpeciesSelect extends Component {
-
-    constructor(props){
+    constructor(props) {
         super(props)
         this.handleChange = this.handleChange.bind(this)
     }
 
-    handleChange(event){
+    handleChange(event) {
         let value = event.target.value
 
-        //if new value not one of species, dont update
-        if(this.props.species.findIndex((species) => {
+        // if new value not one of species, dont update
+        if (this.props.species.findIndex((species) => {
             return (species.name === value)
         }) === -1) return
 
@@ -29,7 +29,9 @@ class SpeciesSelect extends Component {
                 <Select name='species' value={this.props.value} input={<Input />} onChange={this.handleChange}>
                     {
                         this.props.species.map((species) => {
-                            return (<MenuItem value={species.name}>{species.name.capitalize()}</MenuItem>)
+                            return (<MenuItem value={species.name} key={species.name}>
+                                {window.capitalizeString(species.name)}
+                            </MenuItem>)
                         })
                     }
                 </Select>
@@ -37,5 +39,13 @@ class SpeciesSelect extends Component {
         )
     }
 }
-
+SpeciesSelect.propTypes = {
+    species: PropTypes.array.isRequired,
+    fullWidth: PropTypes.bool,
+    margin: PropTypes.string,
+    error: PropTypes.bool,
+    label: PropTypes.string,
+    value: PropTypes.string,
+    onChange: PropTypes.func,
+}
 export default SpeciesSelect
