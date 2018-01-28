@@ -130,28 +130,37 @@ class NewSightingForm extends Component {
         }
 
         let countError = (this.state.inputValidationError !== null &&
-            this.state.inputValidationError.invalidInputName === 'count')
+            this.state.inputValidationError.invalidInputName === 'count' ?
+            this.state.inputValidationError : null)
         let speciesError = (this.state.inputValidationError !== null &&
-            this.state.inputValidationError.invalidInputName === 'species')
+            this.state.inputValidationError.invalidInputName === 'species' ?
+            this.state.inputValidationError : null)
         let descriptionError = (this.state.inputValidationError !== null
-            && this.state.inputValidationError.invalidInputName === 'description')
+            && this.state.inputValidationError.invalidInputName === 'description' ?
+            this.state.inputValidationError : null)
 
         return (
             <Paper className={this.props.classes.NewSightingForm}>
                 <PositiveIntegerInput name='count' value={this.state.controlledCount} onChange={this.handleChange}
-                    error={countError} label='How many ducks did you see?' fullWidth margin='normal' />
+                    error={(countError !== null)}
+                    helperText={(countError !== null) ? 'Input the number of ducks you saw': ''}
+                    label='How many ducks did you see?' fullWidth margin='normal' />
 
                 <SpeciesSelect value={this.state.controlledSpecies}
-                    onChange={this.handleChange}species={this.state.supportedSpecies}
-                    error={speciesError} label='What species were they?' fullWidth margin='normal' />
+                    onChange={this.handleChange} species={this.state.supportedSpecies}
+                    error={(speciesError !== null)}
+                    helperText={(speciesError !== null) ? 'Select the species of the ducks' : ''}
+                    label='What species were they?' fullWidth margin='normal' />
 
                 <TextField name='description' value={this.state.formStateCount} onChange={this.handleChange}
-                    error={descriptionError} label='Tell more about it' multiline rows={3} fullWidth margin='normal' />
+                    error={(descriptionError !== null)}
+                    helperText={(descriptionError !== null) ? 'Invalid description': ''}
+                    label='Tell more about it' multiline rows={3} fullWidth margin='normal' />
 
                 <Button type='submit' onClick={this.handleSubmit} className={this.props.classes.button}
                     raised color='primary'>Send</Button>
                 <Button onClick={this.props.onClose} className={this.props.classes.button}
-                    raised color='accent'>Nevermind</Button>
+                    raised>Nevermind</Button>
 
             </Paper>
         )

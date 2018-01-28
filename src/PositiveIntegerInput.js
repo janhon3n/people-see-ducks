@@ -29,6 +29,7 @@ class PositiveIntegerInput extends Component {
             margin={this.props.margin}
             name={this.props.name}
             label={this.props.label}
+            helperText={this.props.helperText}
             value={this.props.value}
             onChange={this.handleChange}
             error={this.props.error} />
@@ -42,6 +43,7 @@ PositiveIntegerInput.propTypes = {
     margin: PropTypes.string,
     name: PropTypes.string,
     label: PropTypes.string,
+    helperText: PropTypes.string,
     handleChange: PropTypes.func,
     error: PropTypes.bool,
 }

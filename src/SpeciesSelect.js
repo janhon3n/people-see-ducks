@@ -4,6 +4,7 @@ import Input, {InputLabel} from 'material-ui/Input'
 import {MenuItem} from 'material-ui/Menu'
 import Select from 'material-ui/Select'
 import {FormControl} from 'material-ui/Form'
+import FormHelperText from 'material-ui/Form/FormHelperText'
 
 class SpeciesSelect extends Component {
     constructor(props) {
@@ -29,12 +30,13 @@ class SpeciesSelect extends Component {
                 <Select name='species' value={this.props.value} input={<Input />} onChange={this.handleChange}>
                     {
                         this.props.species.map((species) => {
-                            return (<MenuItem value={species.name} key={species.name}>
+                            return (<MenuItem alt="duck" value={species.name} key={species.name}>
                                 {window.capitalizeString(species.name)}
                             </MenuItem>)
                         })
                     }
                 </Select>
+                <FormHelperText>{this.props.helperText}</FormHelperText>
             </FormControl>
         )
     }
@@ -45,6 +47,7 @@ SpeciesSelect.propTypes = {
     margin: PropTypes.string,
     error: PropTypes.bool,
     label: PropTypes.string,
+    helperText: PropTypes.string,
     value: PropTypes.string,
     onChange: PropTypes.func,
 }
