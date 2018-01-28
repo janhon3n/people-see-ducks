@@ -13,9 +13,13 @@ import FullScreenWidthContainer from './FullScreenWidthContainer'
 
 const styles = (theme) => ({
   App: {
-    backgroundColor: theme.palette.primary[100],
+    backgroundColor: theme.palette.primary[50],
     overflow: 'hidden',
     height: '100%',
+  },
+  title: {
+    color: 'black',
+    textShadow: '0 0 2px '+theme.palette.primary[300],
   },
   leaveMargins: {
     margin: '20px',
@@ -38,10 +42,10 @@ class App extends Component {
   render() {
     let classes = this.props.classes
     return (
-      <Grid container justify='start' alignItems='center' direction='column'
+      <Grid container justify='flex-start' alignItems='center' direction='column'
         wrap='nowrap' spacing={0} className={classes.App}>
         <Grid item>
-          <Typography type='display2' className={classes.leaveMargins}>People see ducks!</Typography>
+          <Typography type='display2' className={classes.leaveMargins + ' ' + classes.title}>People see ducks!</Typography>
         </Grid>
 
         {(this.state.showNewSightingForm ?

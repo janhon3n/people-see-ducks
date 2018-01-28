@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import urljoin from 'url-join'
+import moment from 'moment'
 import {withStyles} from 'material-ui/styles'
 import PropTypes from 'prop-types'
 import {CircularProgress} from 'material-ui/Progress'
@@ -11,6 +12,7 @@ const styles = (theme) => ({
   SightingList: {
     width: '100vw',
     maxWidth: '700px',
+    margin: '5px',
   },
 })
 
@@ -18,7 +20,6 @@ class SightingList extends Component {
   constructor(props) {
     super(props)
     this.fetchIntervalId = null
-
     this.state = {
       sightings: null,
       apiFetchError: null,
@@ -52,7 +53,6 @@ class SightingList extends Component {
     window.clearInterval(this.fetchIntervalId)
   }
 
-
   render() {
     if (this.state.apiFetchError !== null) {
       return (<ErrorMessage error={this.state.apiFetchError} />)
@@ -64,14 +64,14 @@ class SightingList extends Component {
     let sortingFunction
     if (this.props.sorting === 'ascending') {
       sortingFunction = (s1, s2) => {
-        return new Date(s1.dateTime) < new Date(s2.dateTime)
+        return (moment(s1.dateTime).isBefore(moment(s2.dateTime)) ? 1 : -1)
       }
     } else {
       sortingFunction = (s1, s2) => {
-        return new Date(s1.dateTime) > new Date(s2.dateTime)
+        return (moment(s1.dateTime).isAfter(moment(s2.dateTime)) ? 1 : -1)
       }
     }
-    sightings.sort(sortingFunction)
+    sightings = sightings.sort(sortingFunction)
 
     return (
       <div className={this.props.classes.SightingList}>

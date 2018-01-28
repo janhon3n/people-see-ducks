@@ -32,7 +32,7 @@ class SortableSightingList extends Component {
 
     render() {
         return (
-            <Grid container justify='start' alignItems='center' direction='column' wrap='nowrap' spacing={0}>
+            <Grid container justify='flex-start' alignItems='center' direction='column' wrap='nowrap' spacing={0}>
                 <Grid item>
                     <Button className={this.props.classes.button} raised
                         color={(this.state.sorting === 'ascending' ? 'primary' : 'default')} onClick={(e) => {

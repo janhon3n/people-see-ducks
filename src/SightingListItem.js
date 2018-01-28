@@ -9,9 +9,6 @@ import Typography from 'material-ui/Typography/Typography'
 const styles = (theme) => ({
     container: {
         'overflow': 'hidden',
-        '&:last-child': {
-            marginBottom: '0px',
-        },
         '&:first-child': {
             marginTop: '0px',
         },
@@ -22,6 +19,7 @@ const styles = (theme) => ({
         borderBottom: '1px solid #999',
         display: 'flex',
         justifyContent: 'space-between',
+        alignItems: 'center',
         padding: '10px',
     },
     main: {
@@ -48,7 +46,7 @@ function SightingListItem(props) {
                     {'Someone saw ' + count + ' ' + window.capitalizeString(species) + (count > 1 ? 's' : '')}
                 </Typography>
                 <Typography type='body1'>
-                    {date.format('DD.MM.YYYY HH:mm')}
+                    {date.fromNow()}
                 </Typography>
             </div>
             <div className={props.classes.main}>
@@ -58,8 +56,8 @@ function SightingListItem(props) {
                 <div className={props.classes.ducks}>
                     {
                         [...Array(count)].map((item, index) => {
-                            return <img className={props.classes.duck}
-                                src='rubber-clipart-yToeq8G8c.svg' width='24' key={index} />
+                            return <img className={props.classes.duck} alt="a duck"
+                                src='duck.ico' width='24' key={index} />
                         })
                     }
                 </div>

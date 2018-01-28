@@ -11,12 +11,12 @@ const styles = (theme) => ({
   },
 })
 
-function ErrorMessage() {
+function ErrorMessage(props) {
   return (
-    <Paper className={this.props.classes.ErrorMessage}>
-      <strong>Error!</strong> {this.props.error.message}
-      {(this.props.error.extraMessage !== undefined &&
-        <Typography type='caption'>{this.props.error.extraMessage}</Typography>
+    <Paper className={props.classes.ErrorMessage}>
+      <strong>Error!</strong> {props.error.message}
+      {(props.error.extraMessage !== undefined &&
+        <Typography type='caption'>{props.error.extraMessage}</Typography>
       )}
     </Paper>
   )

@@ -7,7 +7,7 @@ const styles = (theme) => ({
         width: '100vw',
         display: 'flex',
         justifyContent: 'center',
-        backgroundColor: 'rgba(0,0,0,0.1)',
+        backgroundColor: theme.palette.primary[100],
         padding: '15px',
         boxShadow: 'inset 0 0 5px rgba(0,0,0,0.5)',
     },
