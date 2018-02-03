@@ -31,11 +31,11 @@ class SightingList extends Component {
     let response
     // fetch species from the API and add them to the state
     try {
-      response = await fetch(urljoin(window.apiUrl, window.sightingsPath))
+      response = await fetch(urljoin(process.env.REACT_APP_API_URL, process.env.REACT_APP_SIGHTINGS_PATH))
       if (!response.ok) throw Error('Error fetching content from the API.')
       response = await response.json()
     } catch (error) {
-      error.extraMessage = 'Could not fetch the sightings from the API.'
+      error.mainMessage = 'Could not fetch the sightings from the API.'
       console.log(error)
       return this.setState({apiFetchError: error})
     }

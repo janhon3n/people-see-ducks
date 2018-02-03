@@ -41,7 +41,7 @@ class NewSightingForm extends Component {
         // fetch species from the API and add them to the state
         let response
         try {
-            response = await fetch(urljoin(window.apiUrl, window.speciesPath))
+            response = await fetch(urljoin(process.env.REACT_APP_API_URL, process.env.REACT_APP_SPECIES_PATH))
             if (!response.ok) throw Error('Error fetching content from the API.')
             response = await response.json()
         } catch (error) {
@@ -81,7 +81,7 @@ class NewSightingForm extends Component {
     }
 
     async sendNewSightingToApi(sightingData) {
-        let response = await fetch(urljoin(window.apiUrl, window.sightingsPath), {
+        let response = await fetch(urljoin(process.env.REACT_APP_API_URL, process.env.REACT_APP_SIGHTINGS_PATH), {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

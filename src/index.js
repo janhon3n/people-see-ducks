@@ -4,7 +4,6 @@ import {MuiThemeProvider, createMuiTheme} from 'material-ui/styles'
 import primaryColor from 'material-ui/colors/brown'
 import secondaryColor from 'material-ui/colors/grey'
 import './index.css'
-import './config.js'
 import 'typeface-roboto'
 
 import App from './App'
