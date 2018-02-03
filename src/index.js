@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom'
 import {MuiThemeProvider, createMuiTheme} from 'material-ui/styles'
 import primaryColor from 'material-ui/colors/brown'
 import secondaryColor from 'material-ui/colors/grey'
-import './index.css'
 import 'typeface-roboto'
 
 import App from './App'
@@ -23,4 +22,5 @@ ReactDOM.render(
     <MuiThemeProvider theme={theme}>
         <App />
     </MuiThemeProvider>,
-    document.getElementById('root'))
+    document.getElementById('root')
+)
