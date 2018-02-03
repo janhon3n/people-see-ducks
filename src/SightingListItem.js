@@ -9,14 +9,17 @@ import Typography from 'material-ui/Typography/Typography'
 const styles = (theme) => ({
     container: {
         'overflow': 'hidden',
+        'margin': '15px',
         '&:first-child': {
             marginTop: '0px',
         },
-        'margin': '15px',
+        '&:last-child': {
+            marginBottom: '0px',
+        },
     },
     header: {
         backgroundColor: theme.palette.primary[50],
-        borderBottom: '1px solid #999',
+        borderBottom: '1px solid '+theme.palette.primary[100],
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -42,11 +45,12 @@ function SightingListItem(props) {
     return (
         <Paper elevation={5} className={props.classes.container} key={props.sighting.id}>
             <div className={props.classes.header}>
-                <Typography type='title'>
-                    {'Someone saw ' + count + ' ' + window.capitalizeString(species) + (count > 1 ? 's' : '')}
+                <Typography type='headline'>
+                    {'Someone saw ' + window.numberToWord(count) + ' '
+                    + window.capitalizeString(species) + (count > 1 ? 's' : '')}
                 </Typography>
                 <Typography type='body1'>
-                    {date.fromNow()}
+                    {(date.isAfter(moment().subtract(3, 'days')) ? date.fromNow() : date.format('D.M.YYYY'))}
                 </Typography>
             </div>
             <div className={props.classes.main}>

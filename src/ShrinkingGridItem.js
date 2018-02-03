@@ -5,9 +5,19 @@ import Grid from 'material-ui/Grid'
 
 const styles = (theme) => ({
     ShrinkingGridItem: {
-        flex: '0 1 auto',
-        display: 'flex',
-        overflowX: 'visible',
+        'flex': '0 1 auto',
+        'display': 'flex',
+        'flexDirection': 'column',
+        'overflowX': 'visible',
+        '&::-webkit-scrollbar': {
+            width: '10px',
+          },
+          '&::-webkit-scrollbar-track': {
+            backgroundColor: theme.palette.primary[300],
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: theme.palette.primary[600],
+          },
     },
 })
 

@@ -12,30 +12,35 @@ import ShrinkingGridItem from './ShrinkingGridItem'
 import FullScreenWidthContainer from './FullScreenWidthContainer'
 
 const styles = (theme) => ({
-  App: {
-    backgroundColor: theme.palette.primary[50],
-    overflow: 'hidden',
-    height: '100%',
+  'App': {
+    'backgroundColor': theme.palette.primary[50],
+    'overflow': 'hidden',
+    'height': '100%',
   },
-  title: {
+  'title': {
+    margin: '15px',
     color: 'black',
-    textShadow: '0 0 2px '+theme.palette.primary[300],
+    textShadow: '0 0 2px ' + theme.palette.primary[300],
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '30px',
+      margin: '10px',
+    },
   },
-  leaveMargins: {
-    margin: '20px',
+  'margins': {
+    margin: '5px',
   },
 })
 
 class App extends Component {
   constructor(props) {
     super(props)
-    this.toggleNewSightingFormVisibility = this.toggleNewSightingFormVisibility.bind(this)
+    this.setNewSightingFormVisibility = this.setNewSightingFormVisibility.bind(this)
     this.state = {
       showNewSightingForm: false,
     }
   }
 
-  toggleNewSightingFormVisibility(newVisibility) {
+  setNewSightingFormVisibility(newVisibility) {
     this.setState({showNewSightingForm: newVisibility})
   }
 
@@ -45,15 +50,19 @@ class App extends Component {
       <Grid container justify='flex-start' alignItems='center' direction='column'
         wrap='nowrap' spacing={0} className={classes.App}>
         <Grid item>
-          <Typography type='display2' className={classes.leaveMargins + ' ' + classes.title}>People see ducks!</Typography>
+          <Typography type='display2' className={classes.title}>
+            People see ducks!
+          </Typography>
         </Grid>
 
         {(this.state.showNewSightingForm ?
-          <ShrinkingGridItem overflow='auto'>
+          <ShrinkingGridItem overflow='hidden'>
             <FullScreenWidthContainer>
-              <NewSightingForm onClose={(e) => {
-                this.toggleNewSightingFormVisibility(false)
-              }} />
+              <ShrinkingGridItem overflow='auto'>
+                <NewSightingForm onClose={(e) => {
+                  this.setNewSightingFormVisibility(false)
+                }} />
+              </ShrinkingGridItem>
             </FullScreenWidthContainer>
           </ShrinkingGridItem>
           :
@@ -61,9 +70,9 @@ class App extends Component {
             <ShrinkingGridItem overflow='hidden'>
               <SortableSightingList />
             </ShrinkingGridItem>
-            <Grid item className={classes.leaveMargins}>
+            <Grid item className={classes.margins}>
               <Button raised color='primary' onClick={(e) => {
-                this.toggleNewSightingFormVisibility(true)
+                this.setNewSightingFormVisibility(true)
               }}>I saw ducks!</Button>
             </Grid>
           </React.Fragment>

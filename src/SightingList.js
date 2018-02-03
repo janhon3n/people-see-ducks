@@ -26,6 +26,16 @@ class SightingList extends Component {
     }
   }
 
+  async componentDidMount() {
+    console.log(process.env.REACT_APP_SIGHTING_LIST_UPDATE_INTERVAL)
+    this.fetchSightingsFromTheApi()
+    this.fetchIntervalId = window.setInterval(() => {
+      this.fetchSightingsFromTheApi()
+    }, process.env.REACT_APP_SIGHTING_LIST_UPDATE_INTERVAL)
+  }
+  componentWillUnmount() {
+    window.clearInterval(this.fetchIntervalId)
+  }
 
   async fetchSightingsFromTheApi() {
     let response
@@ -42,25 +52,7 @@ class SightingList extends Component {
     this.setState({sightings: response, apiFetchError: null})
   }
 
-
-  componentDidMount() {
-    this.fetchIntervalId = window.setInterval(() => {
-      this.fetchSightingsFromTheApi()
-    }, 5000)
-    this.fetchSightingsFromTheApi()
-  }
-  componentWillUnmount() {
-    window.clearInterval(this.fetchIntervalId)
-  }
-
-  render() {
-    if (this.state.apiFetchError !== null) {
-      return (<ErrorMessage error={this.state.apiFetchError} />)
-    } else if (this.state.sightings === null) {
-      return (<CircularProgress style={{padding: '5px'}} size={60} />)
-    }
-
-    let sightings = this.state.sightings.slice()
+  sortSightings(sightings) {
     let sortingFunction
     if (this.props.sorting === 'ascending') {
       sortingFunction = (s1, s2) => {
@@ -71,7 +63,18 @@ class SightingList extends Component {
         return (moment(s1.dateTime).isAfter(moment(s2.dateTime)) ? 1 : -1)
       }
     }
-    sightings = sightings.sort(sortingFunction)
+    return sightings.sort(sortingFunction)
+  }
+
+  render() {
+    if (this.state.apiFetchError !== null) {
+      return (<ErrorMessage error={this.state.apiFetchError} />)
+    } else if (this.state.sightings === null) {
+      return (<CircularProgress style={{padding: '5px'}} size={60} />)
+    }
+
+    let sightings = this.state.sightings.slice()
+    sightings = this.sortSightings(sightings)
 
     return (
       <div className={this.props.classes.SightingList}>
@@ -84,6 +87,7 @@ class SightingList extends Component {
     )
   }
 }
+
 
 SightingList.propTypes = {
   classes: PropTypes.object.isRequired,

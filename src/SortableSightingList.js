@@ -10,10 +10,6 @@ import FullScreenWidthContainer from './FullScreenWidthContainer'
 const styles = (theme) => ({
     SortableSightingList: {
     },
-    button: {
-        margin: '10px',
-        marginBottom: '15px',
-    },
 })
 
 class SortableSightingList extends Component {
@@ -34,12 +30,14 @@ class SortableSightingList extends Component {
         return (
             <Grid container justify='flex-start' alignItems='center' direction='column' wrap='nowrap' spacing={0}>
                 <Grid item>
-                    <Button className={this.props.classes.button} raised
-                        color={(this.state.sorting === 'ascending' ? 'primary' : 'default')} onClick={(e) => {
+                    <Button raised
+                        color={(this.state.sorting === 'ascending' ? 'primary' : 'default')}
+                        onClick={(e) => {
                             this.setSorting('ascending')
                         }}>Newest first</Button>
-                    <Button className={this.props.classes.button} raised
-                        color={(this.state.sorting === 'descending' ? 'primary' : 'default')} onClick={(e) => {
+                    <Button raised
+                        color={(this.state.sorting === 'descending' ? 'primary' : 'default')}
+                        onClick={(e) => {
                             this.setSorting('descending')
                         }}>Oldest first</Button>
                 </Grid>

@@ -25,8 +25,6 @@ class PositiveIntegerInput extends Component {
 
     render() {
         return <TextField
-            fullWidth={this.props.fullWidth}
-            margin={this.props.margin}
             name={this.props.name}
             label={this.props.label}
             helperText={this.props.helperText}
@@ -39,8 +37,6 @@ class PositiveIntegerInput extends Component {
 PositiveIntegerInput.propTypes = {
     onChange: PropTypes.func,
     value: PropTypes.string,
-    fullWidth: PropTypes.bool,
-    margin: PropTypes.string,
     name: PropTypes.string,
     label: PropTypes.string,
     helperText: PropTypes.string,

@@ -13,10 +13,7 @@ import SpeciesSelect from './SpeciesSelect'
 const styles = (theme) => ({
     NewSightingForm: {
         padding: '30px',
-    },
-    button: {
-        marginTop: '15px',
-        marginRight: '15px',
+        maxWidth: '600px',
     },
 })
 
@@ -26,6 +23,8 @@ class NewSightingForm extends Component {
 
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.validateInputData = this.validateInputData.bind(this)
+        this.fetchSpeciesFromTheApi = this.fetchSpeciesFromTheApi.bind(this)
 
         this.state = {
             supportedSpecies: [],
@@ -38,18 +37,7 @@ class NewSightingForm extends Component {
     }
 
     async componentDidMount() {
-        // fetch species from the API and add them to the state
-        let response
-        try {
-            response = await fetch(urljoin(process.env.REACT_APP_API_URL, process.env.REACT_APP_SPECIES_PATH))
-            if (!response.ok) throw Error('Error fetching content from the API.')
-            response = await response.json()
-        } catch (error) {
-            error.extraMessage = 'Could not fetch the supported species from the API.'
-            console.log(error)
-            return this.setState({apiFetchError: error})
-        }
-        this.setState({supportedSpecies: response, apiFetchError: null})
+        await this.fetchSpeciesFromTheApi()
     }
 
     handleChange(event) {
@@ -80,17 +68,6 @@ class NewSightingForm extends Component {
         this.props.onClose()
     }
 
-    async sendNewSightingToApi(sightingData) {
-        let response = await fetch(urljoin(process.env.REACT_APP_API_URL, process.env.REACT_APP_SIGHTINGS_PATH), {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(sightingData),
-        })
-        if (!response.ok) throw new Error('Error posting the sighting to the api')
-    }
 
     validateInputData(objectWithInputs) {
         if (objectWithInputs.count === undefined ||
@@ -118,12 +95,40 @@ class NewSightingForm extends Component {
         }
     }
 
+    async fetchSpeciesFromTheApi() {
+        // fetch species from the API and add them to the state
+        let response
+        try {
+            response = await fetch(urljoin(process.env.REACT_APP_API_URL, process.env.REACT_APP_SPECIES_PATH))
+            if (!response.ok) throw Error('Error fetching content from the API.')
+            response = await response.json()
+        } catch (error) {
+            error.extraMessage = 'Could not fetch the supported species from the API.'
+            console.log(error)
+            return this.setState({apiFetchError: error})
+        }
+        this.setState({supportedSpecies: response, apiFetchError: null})
+    }
+
+    async sendNewSightingToApi(sightingData) {
+        let response = await fetch(urljoin(process.env.REACT_APP_API_URL, process.env.REACT_APP_SIGHTINGS_PATH), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(sightingData),
+        })
+        if (!response.ok) throw new Error('Error posting the sighting to the api')
+    }
+
     render() {
+        let classes = this.props.classes
         if (this.state.apiFetchError !== null) {
             return (
-                <Paper className={this.props.classes.NewSightingForm}>
+                <Paper className={classes.NewSightingForm}>
                     <ErrorMessage error={this.state.apiFetchError} />
-                    <Button raised color='primary' className={this.props.classes.button}
+                    <Button raised color='primary' className={classes.button}
                         onClick={this.props.onClose}>Return</Button>
                 </Paper>
             )
@@ -140,28 +145,29 @@ class NewSightingForm extends Component {
             this.state.inputValidationError : null)
 
         return (
-            <Paper className={this.props.classes.NewSightingForm}>
-                <PositiveIntegerInput name='count' value={this.state.controlledCount} onChange={this.handleChange}
+            <Paper className={classes.NewSightingForm}>
+                <PositiveIntegerInput name='count' value={this.state.controlledCount}
+                    onChange={this.handleChange}
                     error={(countError !== null)}
                     helperText={(countError !== null) ? 'Input the number of ducks you saw': ''}
-                    label='How many ducks did you see?' fullWidth margin='normal' />
+                    label='How many ducks did you see?'/>
 
-                <SpeciesSelect value={this.state.controlledSpecies}
+                <SpeciesSelect name='species' value={this.state.controlledSpecies}
                     onChange={this.handleChange} species={this.state.supportedSpecies}
                     error={(speciesError !== null)}
                     helperText={(speciesError !== null) ? 'Select the species of the ducks' : ''}
-                    label='What species were they?' fullWidth margin='normal' />
+                    label='What species were they?'/>
 
-                <TextField name='description' value={this.state.formStateCount} onChange={this.handleChange}
+                <TextField name='description' value={this.state.formStateCount}
+                    onChange={this.handleChange}
                     error={(descriptionError !== null)}
                     helperText={(descriptionError !== null) ? 'Invalid description': ''}
-                    label='Tell more about it' multiline rows={3} fullWidth margin='normal' />
+                    label='Tell more about it'/>
 
-                <Button type='submit' onClick={this.handleSubmit} className={this.props.classes.button}
+                <Button type='submit' onClick={this.handleSubmit} className={classes.button}
                     raised color='primary'>Send</Button>
-                <Button onClick={this.props.onClose} className={this.props.classes.button}
+                <Button onClick={this.props.onClose} className={classes.button}
                     raised>Nevermind</Button>
-
             </Paper>
         )
     }

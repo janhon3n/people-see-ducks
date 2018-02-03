@@ -25,9 +25,10 @@ class SpeciesSelect extends Component {
 
     render() {
         return (
-            <FormControl fullWidth={this.props.fullWidth} margin={this.props.margin} error={this.props.error}>
+            <FormControl error={this.props.error}>
                 <InputLabel>{this.props.label}</InputLabel>
-                <Select name='species' value={this.props.value} input={<Input />} onChange={this.handleChange}>
+                <Select name={this.props.name} value={this.props.value}
+                    input={<Input />} onChange={this.handleChange}>
                     {
                         this.props.species.map((species) => {
                             return (<MenuItem alt="duck" value={species.name} key={species.name}>
@@ -36,15 +37,14 @@ class SpeciesSelect extends Component {
                         })
                     }
                 </Select>
-                <FormHelperText>{this.props.helperText}</FormHelperText>
+                {(this.props.helperText ? <FormHelperText>{this.props.helperText}</FormHelperText> : null)}
             </FormControl>
         )
     }
 }
 SpeciesSelect.propTypes = {
     species: PropTypes.array.isRequired,
-    fullWidth: PropTypes.bool,
-    margin: PropTypes.string,
+    name: PropTypes.string,
     error: PropTypes.bool,
     label: PropTypes.string,
     helperText: PropTypes.string,

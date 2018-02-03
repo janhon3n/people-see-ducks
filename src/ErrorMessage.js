@@ -6,7 +6,7 @@ import Typography from 'material-ui/Typography/Typography'
 
 const styles = (theme) => ({
   ErrorMessage: {
-    backgroundColor: theme.palette.error[300],
+    backgroundColor: theme.palette.error[200],
     padding: '20px',
   },
 })
@@ -14,9 +14,12 @@ const styles = (theme) => ({
 function ErrorMessage(props) {
   return (
     <Paper className={props.classes.ErrorMessage}>
-      <strong>Error!</strong> {props.error.message}
-      {(props.error.extraMessage !== undefined &&
-        <Typography type='caption'>{props.error.extraMessage}</Typography>
+      <strong>Error! </strong>
+      {(props.error.mainMessage !== undefined &&
+        props.error.mainMessage
+      )}
+      {(process.env.NODE_ENV !== 'production' &&
+        <Typography type='caption'>{props.error.message}</Typography>
       )}
     </Paper>
   )
