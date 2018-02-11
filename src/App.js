@@ -6,10 +6,10 @@ import Grid from 'material-ui/Grid'
 import Button from 'material-ui/Button'
 import Typography from 'material-ui/Typography'
 
-import SortableSightingList from './SortableSightingList'
-import NewSightingForm from './NewSightingForm'
-import ShrinkingGridItem from './ShrinkingGridItem'
-import FullScreenWidthContainer from './FullScreenWidthContainer'
+import SortableSightingList from 'SightingList/SortableSightingList'
+import NewSightingForm from 'NewSightingForm/NewSightingForm'
+import ShrinkingGridItem from 'Layout/ShrinkingGridItem'
+import FullScreenWidthContainer from 'Layout/FullScreenWidthContainer'
 
 const styles = (theme) => ({
   'App': {

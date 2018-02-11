@@ -6,7 +6,7 @@ import secondaryColor from 'material-ui/colors/grey'
 import errorColor from 'material-ui/colors/red'
 import 'typeface-roboto'
 
-import App from './App'
+import App from 'App'
 
 window.capitalizeString = function(string) {
     return string.charAt(0).toUpperCase() + string.slice(1)

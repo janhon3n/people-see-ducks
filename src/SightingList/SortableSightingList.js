@@ -3,9 +3,10 @@ import Grid from 'material-ui/Grid'
 import {withStyles} from 'material-ui/styles'
 import PropTypes from 'prop-types'
 import Button from 'material-ui/Button'
+
 import SightingList from './SightingList'
-import ShrinkingGridItem from './ShrinkingGridItem'
-import FullScreenWidthContainer from './FullScreenWidthContainer'
+import ShrinkingGridItem from 'Layout/ShrinkingGridItem'
+import FullScreenWidthContainer from 'Layout/FullScreenWidthContainer'
 
 const styles = (theme) => ({
     SortableSightingList: {

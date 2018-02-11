@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import {CircularProgress} from 'material-ui/Progress'
 
 import SightingListItem from './SightingListItem'
-import ErrorMessage from './ErrorMessage'
+import ErrorMessage from 'ErrorMessage'
 
 const styles = (theme) => ({
   SightingList: {
@@ -27,7 +27,6 @@ class SightingList extends Component {
   }
 
   async componentDidMount() {
-    console.log(process.env.REACT_APP_SIGHTING_LIST_UPDATE_INTERVAL)
     this.fetchSightingsFromTheApi()
     this.fetchIntervalId = window.setInterval(() => {
       this.fetchSightingsFromTheApi()
@@ -45,9 +44,9 @@ class SightingList extends Component {
       if (!response.ok) throw Error('Error fetching content from the API.')
       response = await response.json()
     } catch (error) {
-      error.mainMessage = 'Could not fetch the sightings from the API.'
-      console.log(error)
-      return this.setState({apiFetchError: error})
+      let fetchError = new Error('Could not load sightings')
+      fetchError.details = error.message
+      return this.setState({apiFetchError: fetchError})
     }
     this.setState({sightings: response, apiFetchError: null})
   }
@@ -70,7 +69,7 @@ class SightingList extends Component {
     if (this.state.apiFetchError !== null) {
       return (<ErrorMessage error={this.state.apiFetchError} />)
     } else if (this.state.sightings === null) {
-      return (<CircularProgress style={{padding: '5px'}} size={60} />)
+      return (<CircularProgress style={{padding: '10px'}} size={60} />)
     }
 
     let sightings = this.state.sightings.slice()
@@ -87,7 +86,6 @@ class SightingList extends Component {
     )
   }
 }
-
 
 SightingList.propTypes = {
   classes: PropTypes.object.isRequired,

@@ -14,13 +14,13 @@ const styles = (theme) => ({
 function ErrorMessage(props) {
   return (
     <Paper className={props.classes.ErrorMessage}>
-      <strong>Error! </strong>
-      {(props.error.mainMessage !== undefined &&
-        props.error.mainMessage
-      )}
-      {(process.env.NODE_ENV !== 'production' &&
-        <Typography type='caption'>{props.error.message}</Typography>
-      )}
+      <Typography type='headline'>Error! </Typography>
+      <Typography type='body1'>
+        {props.error.message}
+      </Typography>
+      {(process.env.NODE_ENV !== 'production' && props.error.details) &&
+        <Typography type='caption'>{props.error.details}</Typography>
+      }
     </Paper>
   )
 }

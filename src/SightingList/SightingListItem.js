@@ -19,7 +19,7 @@ const styles = (theme) => ({
     },
     header: {
         backgroundColor: theme.palette.primary[50],
-        borderBottom: '1px solid '+theme.palette.primary[100],
+        borderBottom: '1px solid ' + theme.palette.primary[100],
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -47,10 +47,12 @@ function SightingListItem(props) {
             <div className={props.classes.header}>
                 <Typography type='headline'>
                     {'Someone saw ' + window.numberToWord(count) + ' '
-                    + window.capitalizeString(species) + (count > 1 ? 's' : '')}
+                        + window.capitalizeString(species) + (count > 1 ? 's' : '')}
                 </Typography>
                 <Typography type='body1'>
-                    {(date.isAfter(moment().subtract(3, 'days')) ? date.fromNow() : date.format('D.M.YYYY'))}
+                    {(date.isAfter(moment().subtract(3, 'days')) ?
+                        date.fromNow() :
+                        date.format('MMMM Do YYYY'))}
                 </Typography>
             </div>
             <div className={props.classes.main}>

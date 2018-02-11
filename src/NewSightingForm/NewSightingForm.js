@@ -6,7 +6,7 @@ import TextField from 'material-ui/TextField'
 import Button from 'material-ui/Button'
 import Paper from 'material-ui/Paper'
 
-import ErrorMessage from './ErrorMessage'
+import ErrorMessage from 'ErrorMessage'
 import PositiveIntegerInput from './PositiveIntegerInput'
 import SpeciesSelect from './SpeciesSelect'
 
@@ -23,7 +23,7 @@ class NewSightingForm extends Component {
 
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
-        this.validateInputData = this.validateInputData.bind(this)
+        this.validateInputData = this.validateNewSighting.bind(this)
         this.fetchSpeciesFromTheApi = this.fetchSpeciesFromTheApi.bind(this)
 
         this.state = {
@@ -48,20 +48,20 @@ class NewSightingForm extends Component {
     }
 
     async handleSubmit(event) {
-        let inputDataObject = {
+        let sightingToSubmit = {
             'count': Number(this.state.controlledCount),
             'species': this.state.controlledSpecies,
             'dateTime': new Date().toISOString(),
             'description': this.state.controlledDescription,
         }
         try {
-            this.validateInputData(inputDataObject)
+            this.validateNewSighting(sightingToSubmit)
         } catch (error) {
             return this.setState({inputValidationError: error})
         }
         this.setState({inputValidationError: null})
         try {
-            await this.sendNewSightingToApi(inputDataObject)
+            await this.sendNewSightingToApi(sightingToSubmit)
         } catch (error) {
             return this.setState({apiFetchError: error})
         }
@@ -69,26 +69,26 @@ class NewSightingForm extends Component {
     }
 
 
-    validateInputData(objectWithInputs) {
-        if (objectWithInputs.count === undefined ||
-            typeof (objectWithInputs.count) !== 'number' ||
-            Number.isNaN(objectWithInputs.count) ||
-            !Number.isFinite(objectWithInputs.count) ||
-            objectWithInputs.count <= 0) {
+    validateNewSighting(sighting) {
+        if (sighting.count === undefined ||
+            typeof (sighting.count) !== 'number' ||
+            Number.isNaN(sighting.count) ||
+            !Number.isFinite(sighting.count) ||
+            sighting.count <= 0) {
             let error = new Error('Invalid duck count')
             error.invalidInputName = 'count'
             throw error
         }
-        if (objectWithInputs.species === undefined ||
+        if (sighting.species === undefined ||
             this.state.supportedSpecies.findIndex((species) => {
-                return (species.name === objectWithInputs.species)
+                return (species.name === sighting.species)
             }) === -1) {
             let error = new Error('Invalid species')
             error.invalidInputName = 'species'
             throw error
         }
-        if (objectWithInputs.description === undefined ||
-            typeof (objectWithInputs.description) !== 'string') {
+        if (sighting.description === undefined ||
+            typeof (sighting.description) !== 'string') {
             let error = new Error('Invalid description')
             error.invalidInputName = 'description'
             throw error
@@ -100,12 +100,12 @@ class NewSightingForm extends Component {
         let response
         try {
             response = await fetch(urljoin(process.env.REACT_APP_API_URL, process.env.REACT_APP_SPECIES_PATH))
-            if (!response.ok) throw Error('Error fetching content from the API.')
+            if (!response.ok) throw Error('Error fetching content from the API')
             response = await response.json()
         } catch (error) {
-            error.extraMessage = 'Could not fetch the supported species from the API.'
-            console.log(error)
-            return this.setState({apiFetchError: error})
+            let fetchError = new Error('Could not load the supported species')
+            fetchError.details = error.message
+            return this.setState({apiFetchError: fetchError})
         }
         this.setState({supportedSpecies: response, apiFetchError: null})
     }
@@ -119,7 +119,7 @@ class NewSightingForm extends Component {
             },
             body: JSON.stringify(sightingData),
         })
-        if (!response.ok) throw new Error('Error posting the sighting to the api')
+        if (!response.ok) throw new Error('Could not post the new sightings')
     }
 
     render() {
