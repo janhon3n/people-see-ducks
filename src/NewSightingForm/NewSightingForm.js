@@ -1,12 +1,10 @@
 import React, {Component} from 'react'
-import urljoin from 'url-join'
 import {withStyles} from 'material-ui/styles'
 import PropTypes from 'prop-types'
 import TextField from 'material-ui/TextField'
 import Button from 'material-ui/Button'
 import Paper from 'material-ui/Paper'
 
-import ErrorMessage from 'ErrorMessage'
 import PositiveIntegerInput from './PositiveIntegerInput'
 import SpeciesSelect from './SpeciesSelect'
 
@@ -24,20 +22,13 @@ class NewSightingForm extends Component {
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
         this.validateInputData = this.validateNewSighting.bind(this)
-        this.fetchSpeciesFromTheApi = this.fetchSpeciesFromTheApi.bind(this)
 
         this.state = {
-            supportedSpecies: [],
             controlledCount: '',
             controlledSpecies: '',
             controlledDescription: '',
-            apiFetchError: null,
             inputValidationError: null,
         }
-    }
-
-    async componentDidMount() {
-        await this.fetchSpeciesFromTheApi()
     }
 
     handleChange(event) {
@@ -60,14 +51,8 @@ class NewSightingForm extends Component {
             return this.setState({inputValidationError: error})
         }
         this.setState({inputValidationError: null})
-        try {
-            await this.sendNewSightingToApi(sightingToSubmit)
-        } catch (error) {
-            return this.setState({apiFetchError: error})
-        }
-        this.props.onClose()
+        this.props.onSightingSubmit(sightingToSubmit)
     }
-
 
     validateNewSighting(sighting) {
         if (sighting.count === undefined ||
@@ -95,45 +80,7 @@ class NewSightingForm extends Component {
         }
     }
 
-    async fetchSpeciesFromTheApi() {
-        // fetch species from the API and add them to the state
-        let response
-        try {
-            response = await fetch(urljoin(process.env.REACT_APP_API_URL, process.env.REACT_APP_SPECIES_PATH))
-            if (!response.ok) throw Error('Error fetching content from the API')
-            response = await response.json()
-        } catch (error) {
-            let fetchError = new Error('Could not load the supported species')
-            fetchError.details = error.message
-            return this.setState({apiFetchError: fetchError})
-        }
-        this.setState({supportedSpecies: response, apiFetchError: null})
-    }
-
-    async sendNewSightingToApi(sightingData) {
-        let response = await fetch(urljoin(process.env.REACT_APP_API_URL, process.env.REACT_APP_SIGHTINGS_PATH), {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(sightingData),
-        })
-        if (!response.ok) throw new Error('Could not post the new sightings')
-    }
-
     render() {
-        let classes = this.props.classes
-        if (this.state.apiFetchError !== null) {
-            return (
-                <Paper className={classes.NewSightingForm}>
-                    <ErrorMessage error={this.state.apiFetchError} />
-                    <Button raised color='primary' className={classes.button}
-                        onClick={this.props.onClose}>Return</Button>
-                </Paper>
-            )
-        }
-
         let countError = (this.state.inputValidationError !== null &&
             this.state.inputValidationError.invalidInputName === 'count' ?
             this.state.inputValidationError : null)
@@ -145,7 +92,7 @@ class NewSightingForm extends Component {
             this.state.inputValidationError : null)
 
         return (
-            <Paper className={classes.NewSightingForm}>
+            <Paper className={this.props.classes.NewSightingForm}>
                 <PositiveIntegerInput name='count' value={this.state.controlledCount}
                     onChange={this.handleChange}
                     error={(countError !== null)}
@@ -153,7 +100,7 @@ class NewSightingForm extends Component {
                     label='How many ducks did you see?'/>
 
                 <SpeciesSelect name='species' value={this.state.controlledSpecies}
-                    onChange={this.handleChange} species={this.state.supportedSpecies}
+                    onChange={this.handleChange} species={this.props.supportedSpecies}
                     error={(speciesError !== null)}
                     helperText={(speciesError !== null) ? 'Select the species of the ducks' : ''}
                     label='What species were they?'/>
@@ -164,9 +111,9 @@ class NewSightingForm extends Component {
                     helperText={(descriptionError !== null) ? 'Invalid description': ''}
                     label='Tell more about it'/>
 
-                <Button type='submit' onClick={this.handleSubmit} className={classes.button}
+                <Button type='submit' onClick={this.handleSubmit}
                     raised color='primary'>Send</Button>
-                <Button onClick={this.props.onClose} className={classes.button}
+                <Button onClick={this.props.onClose}
                     raised>Nevermind</Button>
             </Paper>
         )
@@ -175,6 +122,10 @@ class NewSightingForm extends Component {
 
 NewSightingForm.propTypes = {
     classes: PropTypes.object.isRequired,
+    supportedSpecies: PropTypes.arrayOf(PropTypes.shape({
+        name: PropTypes.string,
+    })),
+    onSightingSubmit: PropTypes.func,
     onClose: PropTypes.func,
 }
 

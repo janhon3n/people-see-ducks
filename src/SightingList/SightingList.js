@@ -1,12 +1,9 @@
-import React, {Component} from 'react'
-import urljoin from 'url-join'
-import moment from 'moment'
+import React from 'react'
 import {withStyles} from 'material-ui/styles'
 import PropTypes from 'prop-types'
-import {CircularProgress} from 'material-ui/Progress'
 
 import SightingListItem from './SightingListItem'
-import ErrorMessage from 'ErrorMessage'
+import CircularProgress from 'material-ui/Progress/CircularProgress'
 
 const styles = (theme) => ({
   SightingList: {
@@ -16,80 +13,31 @@ const styles = (theme) => ({
   },
 })
 
-class SightingList extends Component {
-  constructor(props) {
-    super(props)
-    this.fetchIntervalId = null
-    this.state = {
-      sightings: null,
-      apiFetchError: null,
-    }
+function SightingList(props) {
+  if (props.loading) {
+    return <CircularProgress size={60} style={{padding: '15px'}}/>
   }
-
-  async componentDidMount() {
-    this.fetchSightingsFromTheApi()
-    this.fetchIntervalId = window.setInterval(() => {
-      this.fetchSightingsFromTheApi()
-    }, process.env.REACT_APP_SIGHTING_LIST_UPDATE_INTERVAL)
-  }
-  componentWillUnmount() {
-    window.clearInterval(this.fetchIntervalId)
-  }
-
-  async fetchSightingsFromTheApi() {
-    let response
-    // fetch species from the API and add them to the state
-    try {
-      response = await fetch(urljoin(process.env.REACT_APP_API_URL, process.env.REACT_APP_SIGHTINGS_PATH))
-      if (!response.ok) throw Error('Error fetching content from the API.')
-      response = await response.json()
-    } catch (error) {
-      let fetchError = new Error('Could not load sightings')
-      fetchError.details = error.message
-      return this.setState({apiFetchError: fetchError})
-    }
-    this.setState({sightings: response, apiFetchError: null})
-  }
-
-  sortSightings(sightings) {
-    let sortingFunction
-    if (this.props.sorting === 'ascending') {
-      sortingFunction = (s1, s2) => {
-        return (moment(s1.dateTime).isBefore(moment(s2.dateTime)) ? 1 : -1)
+  return (
+    <div className={props.classes.SightingList}>
+      {
+        props.sightings.map((sighting) => {
+          return (<SightingListItem key={sighting.id} sighting={sighting} />)
+        })
       }
-    } else {
-      sortingFunction = (s1, s2) => {
-        return (moment(s1.dateTime).isAfter(moment(s2.dateTime)) ? 1 : -1)
-      }
-    }
-    return sightings.sort(sortingFunction)
-  }
-
-  render() {
-    if (this.state.apiFetchError !== null) {
-      return (<ErrorMessage error={this.state.apiFetchError} />)
-    } else if (this.state.sightings === null) {
-      return (<CircularProgress style={{padding: '10px'}} size={60} />)
-    }
-
-    let sightings = this.state.sightings.slice()
-    sightings = this.sortSightings(sightings)
-
-    return (
-      <div className={this.props.classes.SightingList}>
-        {
-          sightings.map((sighting) => {
-            return (<SightingListItem key={sighting.id} sighting={sighting} />)
-          })
-        }
-      </div>
-    )
-  }
+    </div>
+  )
 }
 
 SightingList.propTypes = {
   classes: PropTypes.object.isRequired,
-  sorting: PropTypes.string,
+  loading: PropTypes.bool,
+  sightings: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+    species: PropTypes.string,
+    description: PropTypes.string,
+    dateTime: PropTypes.string,
+    count: PropTypes.number,
+  })),
 }
 
 export default withStyles(styles)(SightingList)

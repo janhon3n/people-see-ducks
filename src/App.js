@@ -6,8 +6,8 @@ import Grid from 'material-ui/Grid'
 import Button from 'material-ui/Button'
 import Typography from 'material-ui/Typography'
 
-import SortableSightingList from 'SightingList/SortableSightingList'
-import NewSightingForm from 'NewSightingForm/NewSightingForm'
+import SortableSightingListContainer from 'SightingList/SortableSightingListContainer'
+import NewSightingFormContainer from 'NewSightingForm/NewSightingFormContainer'
 import ShrinkingGridItem from 'Layout/ShrinkingGridItem'
 import FullScreenWidthContainer from 'Layout/FullScreenWidthContainer'
 
@@ -59,7 +59,7 @@ class App extends Component {
           <ShrinkingGridItem overflow='hidden'>
             <FullScreenWidthContainer>
               <ShrinkingGridItem overflow='auto'>
-                <NewSightingForm onClose={(e) => {
+                <NewSightingFormContainer onClose={(e) => {
                   this.setNewSightingFormVisibility(false)
                 }} />
               </ShrinkingGridItem>
@@ -68,7 +68,7 @@ class App extends Component {
           :
           <React.Fragment>
             <ShrinkingGridItem overflow='hidden'>
-              <SortableSightingList />
+              <SortableSightingListContainer />
             </ShrinkingGridItem>
             <Grid item className={classes.margins}>
               <Button raised color='primary' onClick={(e) => {
