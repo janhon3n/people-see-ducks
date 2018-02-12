@@ -49,14 +49,14 @@ class SortableSightingList extends Component {
                 <Grid item>
                     <Button raised
                         color={(this.state.sorting === 'ascending' ? 'primary' : 'default')}
-                        onClick={(e) => {
-                            this.setSorting('ascending')
-                        }}>Newest first</Button>
+                        onClick={(e) => this.setSorting('ascending')}>
+                        Newest first
+                    </Button>
                     <Button raised
                         color={(this.state.sorting === 'descending' ? 'primary' : 'default')}
-                        onClick={(e) => {
-                            this.setSorting('descending')
-                        }}>Oldest first</Button>
+                        onClick={(e) => this.setSorting('descending')}>
+                        Oldest first
+                    </Button>
                 </Grid>
                 <FullScreenWidthContainer>
                     <ShrinkingGridItem overflow='auto'>

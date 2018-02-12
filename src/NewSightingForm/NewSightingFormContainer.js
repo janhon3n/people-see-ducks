@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import urljoin from 'url-join'
 import PropTypes from 'prop-types'
 import Button from 'material-ui/Button'
-import Paper from 'material-ui/Paper'
 
 import ErrorMessage from 'ErrorMessage'
 import NewSightingForm from './NewSightingForm'
@@ -12,6 +11,7 @@ class NewSightingFormContainer extends Component {
     constructor(props) {
         super(props)
         this.fetchSpeciesFromTheApi = this.fetchSpeciesFromTheApi.bind(this)
+        this.handleNewSightingSubmit = this.handleNewSightingSubmit.bind(this)
 
         this.state = {
             supportedSpecies: [],
@@ -73,7 +73,7 @@ class NewSightingFormContainer extends Component {
         return (
            <NewSightingForm
             supportedSpecies={this.state.supportedSpecies}
-            onSubmit={this.handleNewSightingSubmit}
+            onSightingSubmit={this.handleNewSightingSubmit}
             onClose={this.props.onClose} />
         )
     }

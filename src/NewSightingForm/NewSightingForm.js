@@ -38,7 +38,7 @@ class NewSightingForm extends Component {
         })
     }
 
-    async handleSubmit(event) {
+    async handleSubmit() {
         let sightingToSubmit = {
             'count': Number(this.state.controlledCount),
             'species': this.state.controlledSpecies,
@@ -65,7 +65,7 @@ class NewSightingForm extends Component {
             throw error
         }
         if (sighting.species === undefined ||
-            this.state.supportedSpecies.findIndex((species) => {
+            this.props.supportedSpecies.findIndex((species) => {
                 return (species.name === sighting.species)
             }) === -1) {
             let error = new Error('Invalid species')
