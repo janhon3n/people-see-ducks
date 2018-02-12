@@ -1,12 +1,12 @@
-#### People see ducks
-Project created for Vincit koodarijahti 2018
+## People see ducks
+Project created for Vincit koodarijahti 2018  
 
-This project uses __React__ and [material-ui-next](https://material-ui-next.com/)
+This project uses __React__ and [material-ui-next](https://material-ui-next.com/)  
 
 ### Instructions
-Change directory to root folder
-Install dependencies with 'npm install'
-Run project in development mode with 'npm start'
-Build project with 'npm run build'
++ `npm install` to install dependencies
++ `npm start`  to run the project in development mode
++ `npm run build` to build the project 
 
-Configure port and connection to the API by editing the '.env' file.
+
+Configure port and connection to the API by editing the __.env__ file.  
